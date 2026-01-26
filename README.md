@@ -1,3 +1,5 @@
+![cpu-smoke-test](../../actions/workflows/ci.yml/badge.svg)
+
 # bitcoin-timeseries-ml-engineering
 ## Bitcoin Time-Series ML Engineering (LSTM + Walk-Forward Validation) — portfolio-grade pipeline with private alpha redaction
 
