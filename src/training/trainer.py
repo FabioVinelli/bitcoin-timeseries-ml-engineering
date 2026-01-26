@@ -249,11 +249,21 @@ class Trainer:
                 loss = self.criterion(pred, batch_y)
                 
                 total_loss += loss.item()
-                predictions.append(pred.cpu().numpy())
-                actuals.append(batch_y.cpu().numpy())
+                # Convert to list first (defensive: avoids numpy ABI issues)
+                # Handle both scalar and tensor cases
+                pred_list = pred.detach().cpu().to(torch.float32).tolist()
+                actual_list = batch_y.detach().cpu().to(torch.float32).tolist()
+                # Ensure we have a list (handle scalar case)
+                if not isinstance(pred_list, list):
+                    pred_list = [pred_list]
+                if not isinstance(actual_list, list):
+                    actual_list = [actual_list]
+                predictions.extend(pred_list)
+                actuals.extend(actual_list)
         
-        predictions = np.concatenate(predictions)
-        actuals = np.concatenate(actuals)
+        # Convert to numpy arrays
+        predictions = np.array(predictions)
+        actuals = np.array(actuals)
         
         return total_loss / len(val_loader), predictions, actuals
     
