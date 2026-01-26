@@ -1,84 +1,149 @@
 ![CI](https://github.com/FabioVinelli/bitcoin-timeseries-ml-engineering/actions/workflows/ci.yml/badge.svg)
 
+# bitcoin-timeseries-ml-engineering
 
-# Bitcoin-timeseries-ml-engineering
-## Bitcoin Time-Series ML Engineering (LSTM + Walk-Forward Validation) — portfolio-grade pipeline with private alpha redaction
+Bitcoin time-series ML engineering project (IBM AI Engineering Certificate): **LSTM variants + walk-forward validation + reporting dashboards**, with **private alpha redaction** and **synthetic CI reproducibility**.
 
-> **Portfolio project for the IBM AI Engineering Certificate**  
-> This repo demonstrates end-to-end ML engineering for financial time-series (data processing → model training → evaluation → reproducible runs).  
-> **Important boundary:** my proprietary trading datasets, QFL-DCA rules, and "alpha discoveries" are intentionally **not** published.
+> **Boundary (non-negotiable):** proprietary trading datasets, QFL-DCA rules/parameters, and any "alpha discoveries" are intentionally **not published**.  
+> This repo is designed to demonstrate **engineering discipline, evaluation rigor, and reporting**, not to release a deployable trading system.
 
 ---
 
-## What this repo is
-A **production-style ML pipeline** for Bitcoin forecasting experiments using:
-- **Time-series-safe splits** (chronological + walk-forward evaluation)
-- **Leakage-resistant scaling** (fit on train only)
-- **Model architectures** (LSTM variants + optional attention/CNN)
-- **Evaluation** (standard ML metrics + trading-aware metrics)
+## Project Scope
 
-This is designed to be **auditable, reproducible, and recruiter-readable**.
+This repository implements an end-to-end pipeline for **Bitcoin forecasting experiments**:
+
+- **Time-series-safe splits** (chronological + optional walk-forward evaluation)
+- **Leakage-resistant scaling** (fit scalers on train split only)
+- **Deep sequence models** (LSTM / BiLSTM / Attention / CNN-BiLSTM-Attention)
+- **Evaluation** with both:
+  - ML metrics (MSE/RMSE/MAE/MAPE/R²)
+  - Trading-aware metrics (directional accuracy, Sharpe, drawdown, profit factor, Calmar, etc.)
+- **Reproducible runs** (config-driven CLI + CPU-safe CI smoke test)
 
 ---
 
 ## What this repo is NOT
+
 - Not a "copy-paste profitable strategy"
-- Not a data dump of my historical trades
-- Not a release of my full QFL-DCA alpha rulebook
+- Not a dump of trade logs or private datasets
+- Not a release of QFL-DCA rule logic, thresholds, or optimization research
 - Not financial advice
 
-If you want to reproduce results, you must use **your own datasets** (or the optional public sample described below).
+---
+
+## Reporting & Visual Analysis
+
+This project includes a reporting layer intended to make results **auditable and comparable**.
+
+### Strategy Performance Dashboard (example)
+
+![Strategy Performance Analysis](docs/images/strategy_performance.png)
+
+**What this dashboard highlights:**
+- Equity curve vs Buy & Hold
+- Drawdown profile
+- Trades and win-rate by regime (bull/bear/sideways)
+- Monthly return distribution
+- Summary risk metrics (Sharpe, MaxDD, Calmar, Profit Factor)
+
+> If you don't see this image render, ensure the file exists at:
+> `docs/images/strategy_performance.png`
+
+### Model Training vs Strategy Outcomes
+
+A core principle in this repo: **better predictive loss does not automatically translate into better trading performance**.
+Execution constraints, regime shifts, costs, and capital deployment dominate real outcomes.
+
+![Model vs Strategy](docs/images/model_vs_strategy.png)
+
+**Interpretation guidance:**
+- Lower validation loss ≠ better trading performance
+- QFL-DCA may outperform ML due to execution discipline
+- ML is best positioned as a **signal enhancer**, not a standalone strategy
+
+### Drawdown Comparison (Buy & Hold vs ML vs QFL-DCA)
+
+![Drawdown Comparison](docs/images/drawdown_comparison.png)
+
+### Regime Heatmap (bull / bear / sideways)
+
+![Regime Heatmap](docs/images/regime_heatmap.png)
 
 ---
 
-## Privacy / Alpha Redaction Policy (Explicit)
-To protect years of research and private trading data, the following are **excluded from this public repo**:
-- Private `data/` (raw, processed, or labeled datasets)
-- Private `outputs/` (full experiment result tables, matched trades, correlations)
-- Certain strategy-specific configurations / thresholds
-- Full QFL-DCA optimization documents or proprietary rule sets
+## Comparative Evaluation: ML vs Buy & Hold vs QFL-DCA
 
-What is included instead:
+This repo treats **Buy & Hold** and **QFL-DCA** as benchmarks for validating whether an ML signal adds real value.
+
+| Approach | Purpose | Strengths | Typical Failure Mode |
+|---|---|---|---|
+| **Buy & Hold** | Baseline exposure | Captures long-cycle beta | Large drawdowns, regime risk |
+| **ML Signal (LSTM variants)** | Forecasting / directional edge | Learns temporal patterns | Weak cross-cycle generalization; overfit risk |
+| **QFL-DCA (benchmark)** | Capital deployment discipline | Drawdown control, structured entries | Requires strict risk management; rules are proprietary |
+
+**Interpretation rule used here**
+- If the ML strategy cannot beat **Buy & Hold** on risk-adjusted terms, it is not "production-ready."
+- If QFL-DCA beats the ML strategy, the conclusion is:
+  - ML is best used as a **signal enhancer**, not a standalone trading system.
+
+> **Disclosure:** QFL-DCA implementation details are intentionally excluded. Only aggregated comparisons are shown.
+
+---
+
+## Privacy / Alpha Redaction Policy
+
+Excluded from this public repo:
+- Private datasets (`data/raw/`, trade logs, labeled outcomes)
+- Private outputs (full experiment tables, matched trade histories)
+- Proprietary strategy parameters / thresholds
+- Full QFL-DCA optimization documents
+
+Included:
 - The **pipeline** and **engineering rigor**
 - Config-driven training/evaluation
-- A clear "Bring Your Own Data" interface
-- Optional **synthetic or public sample** dataset support (recommended)
+- Synthetic/public reproducibility path (CI-friendly)
+- Aggregated reporting patterns and templates
 
 ---
 
-## Repo Structure (public-safe)
+## Repo Structure
+
 ```
 .
 ├── src/
 │   ├── data/            # feature engineering + processor (train-only scaling)
 │   ├── models/          # LSTM architectures
 │   ├── training/        # trainer + metrics + walk-forward
-│   └── utils/           # inference utilities
-├── tests/               # unit tests (pipeline sanity checks)
-├── notebooks/           # exploration / colab (sanitized)
-├── configs/             # PUBLIC configs (no private thresholds)
-├── docs/                # methodology notes (portfolio narrative)
-├── scripts/             # helper scripts (sanitized)
+│   └── utils/           # utilities (sanitized)
+├── tests/               # sanity checks
+├── notebooks/           # optional exploration (sanitized)
+├── docs/
+│   └── images/          # charts/graphs used in README
+├── scripts/             # helper scripts (chart generation, etc.)
+├── config.public.yaml   # synthetic CI config (safe + fast)
 ├── main.py              # CLI entry point (train/evaluate)
 ├── requirements.txt
+├── requirements.ci.txt
 ├── README.md
-└── AGENT.md             # contributor/agent runbook (hardening + release flow)
+└── AGENT.md             # runbook (hardening + releases)
 ```
 
 ---
 
-## Engineering Rigor Highlights (what recruiters should notice)
-- **Reproducibility:** seed control + config-driven runs (`config.yaml`)  
-  (see seed handling in `main.py`)  
-- **Leakage control:** scaling is fit on train split only (zero-leakage design)
-- **Time-series validation:** walk-forward cross-validation (no random k-fold)
-- **Time-series rigor:** DataLoaders use `shuffle=False` to preserve temporal order
-- **Checkpointing:** best model is saved and reloaded for evaluation
-- **Metrics:** ML metrics + trading-aware metrics (Sharpe, drawdown, directional accuracy)
+## Engineering Rigor Highlights
+
+- **Time-series correctness:** chronological splits + walk-forward option (no random k-fold)
+- **DataLoader rigor:** `shuffle=False` for temporal order preservation
+- **Leakage control:** scalers fit on train only; persisted for inference
+- **Checkpointing:** best model saved/reloaded for evaluation
+- **Metrics coverage:** ML + trading-aware metrics
+- **CI reproducibility:** synthetic data path to validate pipeline without private data
 
 ---
 
-## Quick Start (Bring Your Own Data)
+## Quick Start (Local)
+
 ### 1) Install
 ```bash
 python -m venv .venv
@@ -86,76 +151,65 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2) Provide your BTC data
+### 2) Run (Synthetic / CI-style)
 
-You provide a CSV at minimum containing OHLCV daily bars.
+This runs without any private data:
 
-Expected location (default):
+```bash
+python main.py --mode train --config config.public.yaml --max_epochs 1
+```
 
-* `data/raw/btc_ohlcv_daily.csv` (not committed)
+### 3) Bring Your Own Data (BYOD)
 
-Optional:
+Provide a CSV with OHLCV daily bars.
 
-* `data/raw/btc_onchain.csv` (not committed)
+Default expected path (gitignored):
 
-> If you don't want to use private data, use the optional "public sample mode" once you add it (see below).
+* `data/raw/btc_ohlcv_daily.csv`
 
-### 3) Train / Evaluate
+Train/evaluate:
 
 ```bash
 python main.py --mode train --config config.yaml
 python main.py --mode evaluate --config config.yaml
 ```
 
-Outputs (local only, not committed):
+Local outputs (gitignored):
 
-* `models/best_model.pt`
-* `models/scalers.joblib`
-* `outputs/metrics.json` / `outputs/metrics.txt`
-* `outputs/test_predictions.csv`
+* `models/`
+* `outputs/`
 
 ---
 
-## Public Sample Mode (Recommended)
+## How to Add Your Own Charts
 
-To keep this repo reproducible without exposing private data:
+1. Put images in:
 
-* Add a **small public dataset** (or generate synthetic data) under:
+* `docs/images/`
 
-  * `data/sample/` (committed)
-* Keep real datasets in:
+2. Embed them in README:
 
-  * `data/raw/` (gitignored)
+```md
+![Caption](docs/images/your_figure.png)
+```
 
-This keeps the project runnable for reviewers while protecting your edge.
+Recommended figures to add:
 
----
-
-## Results (How to interpret)
-
-This repo focuses on **engineering quality** and correct evaluation for noisy markets.
-
-Important:
-
-* Any "paper numbers" (e.g., R²=0.991) are **literature-reported benchmarks**, not guaranteed reproduction.
-* Your actual results depend heavily on data window, feature set, regime shifts, and cost assumptions.
+* Equity curve comparison (Buy & Hold vs ML vs QFL-DCA)
+* Drawdown comparison (same three lines)
+* Regime breakdown (performance by bull/bear/sideways)
+* "Model loss vs strategy returns" (shows optimization ≠ trading success)
 
 ---
 
 ## Safety / Compliance
 
-This is educational and for portfolio demonstration only.
+Educational / research use only.
 No financial advice. Use at your own risk.
 
 ---
 
 ## License
 
-Choose a permissive license for portfolio visibility (MIT/Apache-2.0).
-If you want to restrict use, choose a more protective license. (Decide before first push.)
-
----
-
-## Contact
-
-If you're a recruiter/hiring manager: this repo is intended to show ML engineering skill in time-series forecasting + evaluation discipline.
+Recommended for a public portfolio: **MIT** or **Apache-2.0**.
+Decide before wider distribution.
