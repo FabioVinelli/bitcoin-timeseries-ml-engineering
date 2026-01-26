@@ -10,12 +10,12 @@ Bitcoin time-series ML engineering project (IBM AI Engineering Certificate): **L
 
 ## Results at a Glance
 
-- **Metrics:** Generated per run and saved to `outputs/metrics.json` (see example outputs in `docs/images/`)
-- **Evaluation:** ML metrics (RMSE/MAE/MAPE/R²) + trading metrics (directional accuracy, Sharpe, drawdown, profit factor)
-- **Validation Method:** Walk-forward validation (30-day step size, 30-day minimum test window)
-- **Dataset:** Configurable; synthetic CI uses 500 samples; production uses multi-year daily bars
-- **Reproducibility:** All runs are deterministic (fixed seeds) and config-driven via `config.public.yaml`
-- **Evidence:** See `AGENT.md` for hardening process, `main.py` for entry point, `config.public.yaml` for CI-safe config
+- Walk-forward validation pipeline with leakage-safe preprocessing
+- ML metrics and trading-aware metrics generated per run
+- Synthetic CI path validates full pipeline end-to-end
+- Real results depend on dataset, regime, and configuration
+- All metrics are written to `outputs/metrics.json` and `outputs/metrics.txt`
+- This repo demonstrates **evaluation rigor**, not alpha disclosure
 
 > **Boundary (non-negotiable):** proprietary trading datasets, QFL-DCA rules/parameters, and any "alpha discoveries" are intentionally **not published**.  
 > This repo is designed to demonstrate **engineering discipline, evaluation rigor, and reporting**, not to release a deployable trading system.
