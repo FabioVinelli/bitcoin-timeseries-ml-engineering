@@ -1,0 +1,95 @@
+# Public Configuration for CI/Portfolio Demo
+# ===========================================
+# This config uses synthetic data and minimal settings for public reproducibility.
+# No private data paths or proprietary settings.
+
+# Data settings (synthetic mode)
+data:
+  data_source: "synthetic"  # Use synthetic data generation
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  
+# Feature engineering (minimal for CI speed)
+features:
+  sequence_length: 30  # Reduced from 60 for faster CI runs
+  forecast_horizon: 1
+  use_ohlcv: true
+  use_garch: false  # Disable GARCH for faster feature computation
+  technical:
+    rsi_period: 14
+    macd_fast: 12
+    macd_slow: 26
+    macd_signal: 9
+    bollinger_period: 20
+    bollinger_std: 2
+    sma_periods: [10, 30]
+    ema_periods: [12, 26]
+  volatility_window: 20
+  log_returns: true
+  time_features:
+    - day_of_week
+    - month
+
+# Model architecture (simplified for CI)
+model:
+  type: "lstm_attention"  # Simpler than cnn_bilstm_attention for CI speed
+  input_size: null  # Set automatically
+  hidden_size: 32
+  num_layers: 2
+  bidirectional: true
+  use_attention: true
+  attention_size: 32
+  fc_layers: [64, 32]
+  dropout: 0.3
+  output_size: 1
+
+# Training settings (minimal for CI)
+training:
+  batch_size: 32  # Smaller batch for CI
+  epochs: 1  # CI only needs 1 epoch to verify pipeline
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adam"
+  scheduler:
+    type: "reduce_on_plateau"
+    patience: 5
+    factor: 0.5
+    min_lr: 0.0001
+  early_stopping:
+    patience: 10
+    min_delta: 0.0001
+  gradient_clip: 1.0
+  loss: "mse"
+
+# Evaluation
+evaluation:
+  metrics:
+    - mse
+    - rmse
+    - mae
+  financial_metrics:
+    - directional_accuracy
+
+# Walk-forward validation (disabled for CI speed)
+walk_forward:
+  enabled: false
+
+# Paths (public-safe)
+paths:
+  data_dir: "data"
+  models_dir: "models"
+  outputs_dir: "outputs"
+  logs_dir: "logs"
+
+# Reproducibility
+seed: 42
+
+# Device (CI uses CPU)
+device: "cpu"
+
+# Logging
+logging:
+  level: "INFO"
+  tensorboard: false
+  save_predictions: false
