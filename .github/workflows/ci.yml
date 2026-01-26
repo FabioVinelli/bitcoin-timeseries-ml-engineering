@@ -18,6 +18,10 @@ jobs:
       - run: |
           ls -la
           find . -maxdepth 3 -name "requirements*.txt" -print
-      - run: pip install -r requirements.ci.txt
+      - run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.ci.txt
+          # Explicitly ensure numpy is available (fix for validation step)
+          pip install --upgrade numpy
       - run: python -m compileall src
       - run: python main.py --mode train --config config.public.yaml --max_epochs 1
