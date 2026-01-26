@@ -1,0 +1,10 @@
+# Minimal CPU-safe dependencies for CI
+# This is a reduced set that avoids heavy native builds (TA-Lib, GARCH, etc.)
+# Full research environment uses requirements.txt
+
+numpy
+pandas
+scikit-learn
+torch==2.2.2
+pyyaml
+joblib
