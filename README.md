@@ -4,18 +4,18 @@
 
 Bitcoin time-series ML engineering project (IBM AI Engineering Certificate): **LSTM variants + walk-forward validation + reporting dashboards**, with **private alpha redaction** and **synthetic CI reproducibility**.
 
-**IBM AI Engineering Certificate Alignment:** This project demonstrates time-series data handling, leakage prevention, deep learning architectures (LSTM/BiLSTM/Attention), and comprehensive evaluation—core competencies for production ML systems.
+**IBM AI Engineering Certificate Alignment:** Demonstrates time-series data handling, leakage prevention, deep learning architectures (LSTM/BiLSTM/Attention), and comprehensive evaluation—core competencies for production ML systems.
 
 ---
 
 ## Results at a Glance
 
-- **Best RMSE:** ~0.022 (synthetic validation; real results depend on data window)
-- **Directional Accuracy:** 43-72% (varies by regime; ML signal quality)
-- **Sharpe vs Buy & Hold:** Comparable to slightly better on risk-adjusted basis
-- **Max Drawdown Delta:** ML strategy typically 5-15% lower than Buy & Hold
-- **Walk-Forward Validation:** 30-day step size, 30-day minimum test window
-- **Dataset Span:** Configurable; synthetic CI uses 500 samples; production uses multi-year daily bars
+- **Metrics:** Generated per run and saved to `outputs/metrics.json` (see example outputs in `docs/images/`)
+- **Evaluation:** ML metrics (RMSE/MAE/MAPE/R²) + trading metrics (directional accuracy, Sharpe, drawdown, profit factor)
+- **Validation Method:** Walk-forward validation (30-day step size, 30-day minimum test window)
+- **Dataset:** Configurable; synthetic CI uses 500 samples; production uses multi-year daily bars
+- **Reproducibility:** All runs are deterministic (fixed seeds) and config-driven via `config.public.yaml`
+- **Evidence:** See `AGENT.md` for hardening process, `main.py` for entry point, `config.public.yaml` for CI-safe config
 
 > **Boundary (non-negotiable):** proprietary trading datasets, QFL-DCA rules/parameters, and any "alpha discoveries" are intentionally **not published**.  
 > This repo is designed to demonstrate **engineering discipline, evaluation rigor, and reporting**, not to release a deployable trading system.
@@ -222,10 +222,10 @@ python main.py --mode evaluate --config config.yaml
 - Feature distributions remain consistent (handled via scaling)
 
 **Known Failure Modes:**
-- **Regime shifts:** Model trained on bull market may fail in bear market
-- **Distribution drift:** Feature distributions change over time (mitigated by walk-forward validation)
-- **Overfitting:** High training accuracy with poor generalization (mitigated by early stopping + validation)
-- **Sequence length mismatch:** Model expects fixed-length sequences; data gaps require handling
+- Regime shifts: Model trained on bull market may fail in bear market
+- Distribution drift: Feature distributions change over time (mitigated by walk-forward validation)
+- Overfitting: High training accuracy with poor generalization (mitigated by early stopping + validation)
+- Sequence length mismatch: Model expects fixed-length sequences; data gaps require handling
 
 **Limitations:**
 - Not suitable for high-frequency trading (designed for daily bars)
@@ -264,4 +264,4 @@ No financial advice. Use at your own risk.
 
 ## License
 
-**MIT License** - See LICENSE file for details.
+**MIT License** - See [LICENSE](LICENSE) file for details.
