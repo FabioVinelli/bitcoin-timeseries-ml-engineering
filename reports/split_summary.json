@@ -1,0 +1,114 @@
+{
+  "timestamp": "2026-01-26T14:16:41.406272",
+  "USE_LAYER3_FOR_RETURNS": false,
+  "splits": {
+    "train": {
+      "rows": 1402,
+      "start": "2016-07-09 00:00:00",
+      "end": "2020-05-10 00:00:00"
+    },
+    "val": {
+      "rows": 438,
+      "start": "2020-05-11 00:00:00",
+      "end": "2021-07-22 00:00:00"
+    },
+    "test": {
+      "rows": 621,
+      "start": "2024-04-20 00:00:00",
+      "end": "2025-12-31 00:00:00"
+    }
+  },
+  "feature_config": {
+    "apply_shift": true,
+    "shift_days": 1,
+    "create_labels": true,
+    "create_targets": true,
+    "horizon_days": 7,
+    "use_percentile_labels": true,
+    "labeling_method": "percentile",
+    "mvrv_col": "mvrv_ratio",
+    "window": 730,
+    "buy_percentile": 0.42,
+    "sell_percentile": 0.58,
+    "min_periods": 365,
+    "regime_distribution": {
+      "BUY": 1789,
+      "HOLD": 2016,
+      "SELL": 2402,
+      "BUY_pct": 28.82,
+      "HOLD_pct": 32.48,
+      "SELL_pct": 38.7
+    },
+    "percentile_stats": {
+      "p20_mean": 1.5868349706687523,
+      "p80_mean": 1.8651236761830268,
+      "p20_median": 1.63583,
+      "p80_median": 1.9110999999999998
+    },
+    "rows_processed": 6207,
+    "rows_dropped": 0
+  },
+  "feature_cols": [
+    "hash_rate",
+    "active_addresses",
+    "adjusted_transaction_volume",
+    "miner_revenue",
+    "coin_days_destroyed",
+    "realized_price_lth",
+    "realized_price_sth",
+    "supply_in_profit",
+    "supply_in_loss",
+    "realized_profit_loss",
+    "halving_cycle",
+    "days_since_halving",
+    "cycle_phase",
+    "block_reward",
+    "daily_new_supply",
+    "annual_inflation",
+    "is_post_halving_150d"
+  ],
+  "validation_results": {
+    "temporal_splits": {
+      "passed": true,
+      "message": "Temporal splits OK:\n  Train: 2016-07-09 00:00:00 \u2192 2020-05-10 00:00:00\n  Val:   2020-05-11 00:00:00 \u2192 2021-07-22 00:00:00\n  Test:  2024-04-20 00:00:00 \u2192 2025-12-31 00:00:00"
+    },
+    "leakage": {
+      "passed": true,
+      "message": "No leakage detected in 17 feature columns"
+    },
+    "label_distribution": {
+      "train": {
+        "passed": true,
+        "distribution": {
+          "BUY": 0.36590584878744653,
+          "HOLD": 0.0898716119828816,
+          "SELL": 0.5442225392296719
+        }
+      },
+      "val": {
+        "passed": true,
+        "distribution": {
+          "BUY": 0.0273972602739726,
+          "HOLD": 0.0776255707762557,
+          "SELL": 0.8949771689497716
+        }
+      },
+      "test": {
+        "passed": true,
+        "distribution": {
+          "BUY": 0.01610305958132045,
+          "HOLD": 0.38808373590982287,
+          "SELL": 0.5958132045088567
+        }
+      }
+    },
+    "baselines": {
+      "passed": true,
+      "message": "Baselines computed per-split: train=0.0899, val=0.0776, test=0.3881",
+      "train": 0.0898716119828816,
+      "val": 0.0776255707762557,
+      "test": 0.38808373590982287
+    },
+    "all_passed": true
+  }
+}

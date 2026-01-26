@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-01-26T14:16:41.408330",
+  "regime_classification": {
+    "train_macro_f1": 0.9937031796806649,
+    "train_accuracy": 0.9971469329529244,
+    "train_f1_buy": 0.998046875,
+    "train_f1_hold": 0.984375,
+    "train_f1_sell": 0.9986876640419947,
+    "val_macro_f1": 0.4048905011420126,
+    "val_accuracy": 0.8995433789954338,
+    "val_f1_buy": 0.26666666666666666,
+    "val_f1_hold": 0.0,
+    "val_f1_sell": 0.9480048367593712,
+    "test_macro_f1": 0.2723515288689516,
+    "test_accuracy": 0.6086956521739131,
+    "test_f1_buy": 0.0,
+    "test_f1_hold": 0.0642570281124498,
+    "test_f1_sell": 0.7527975584944049,
+    "train_always_hold_baseline": 0.0898716119828816,
+    "val_always_hold_baseline": 0.0776255707762557,
+    "test_always_hold_baseline": 0.38808373590982287,
+    "test_beats_baseline": "False"
+  },
+  "return_forecasting": {},
+  "validation_passed": true
+}

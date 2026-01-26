@@ -45,7 +45,60 @@ This repository implements an end-to-end pipeline for **Bitcoin forecasting expe
 
 ---
 
-## Reporting & Visual Analysis
+## ARK 3-Layer + Halving-Aware Regime Classification (Proof Fold)
+
+### Overview
+
+A **leak-free regime classification pipeline** that combines:
+- ARK Invest's 3-layer on-chain framework for feature engineering
+- Halving-cycle-aware temporal splits to prevent data contamination
+- Percentile-based labeling for stable cross-cycle signals
+
+![ARK 3-Layer Architecture](docs/images/ark_3_layer_architecture.png)
+
+### Halving-Cycle Temporal Splits
+
+![Halving Temporal Splits](docs/images/halving_temporal_splits.png)
+
+| Split | Cycle | Date Range | Rows |
+|-------|-------|------------|------|
+| **Train** | Cycle 2 | 2016-07-09 → 2020-05-10 | 1,402 |
+| **Val** | Cycle 3 | 2020-05-11 → 2021-07-22 | 438 |
+| **Test** | Cycle 4 | 2024-04-20 → 2025-12-31 | 621 |
+
+**Constraint**: `train.max_date < val.min_date < test.min_date`
+
+### Regime Label Distribution
+
+![Regime Label Distribution](docs/images/regime_label_distribution.png)
+
+### Results
+
+| Metric | Train | Val | Test |
+|--------|-------|-----|------|
+| Macro-F1 | 0.994 | 0.405 | 0.272 |
+| Always-HOLD Baseline | 9.0% | 7.8% | 38.8% |
+
+![Cross-Cycle Degradation](docs/images/cross_cycle_degradation.png)
+
+### Key Finding: Cross-Cycle Distribution Shift
+
+> **The model underperforms baseline on test — this is expected and correct.**
+
+![Model vs Baseline](docs/images/model_vs_baseline_test.png)
+
+Patterns learned in Cycle 2 (2016-2020) do not transfer to Cycle 4 (2024-2025). This demonstrates engineering discipline over metric-chasing.
+
+### Test Set Confusion Matrix
+
+![Test Confusion Matrix](docs/images/test_confusion_matrix.png)
+
+**Run the proof fold pipeline:**
+```bash
+python src/proof_fold.py
+```
+
+**See detailed documentation:** [MODEL_CARD.md](MODEL_CARD.md)
 
 This project includes a reporting layer intended to make results **auditable and comparable**.
 
@@ -259,6 +312,21 @@ Recommended figures to add:
 
 Educational / research use only.
 No financial advice. Use at your own risk.
+
+---
+
+## References
+
+This project's on-chain feature taxonomy and valuation concepts are inspired by the following public research:
+
+- **ARK Invest (2021).**  
+  *On-Chain Data: A Bitcoin Valuation Framework.*  
+  ARK Invest Research Whitepaper.  
+  https://ark-invest.com/articles/valuation-models/on-chain-data-bitcoin-valuation-framework/
+
+**Important note:**  
+This repository is an **independent engineering implementation** that adapts and extends high-level ideas from the ARK framework.  
+It is **not affiliated with, endorsed by, or reviewed by ARK Invest**, and all modeling choices, thresholds, labeling logic, and evaluation procedures are the author's own.
 
 ---
 
