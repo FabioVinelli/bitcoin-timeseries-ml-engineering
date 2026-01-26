@@ -5,6 +5,8 @@
 numpy
 pandas
 scikit-learn
-torch==2.2.2
 pyyaml
 joblib
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2
