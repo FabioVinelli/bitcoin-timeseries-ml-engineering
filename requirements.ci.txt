@@ -2,7 +2,7 @@
 # This is a reduced set that avoids heavy native builds (TA-Lib, GARCH, etc.)
 # Full research environment uses requirements.txt
 
-numpy
+numpy<2
 pandas
 scikit-learn
 pyyaml
