@@ -113,9 +113,6 @@ This project includes a reporting layer intended to make results **auditable and
 - Monthly return distribution
 - Summary risk metrics (Sharpe, MaxDD, Calmar, Profit Factor)
 
-> If you don't see this image render, ensure the file exists at:
-> `docs/images/strategy_performance.png`
-
 ### Model Training vs Strategy Outcomes
 
 A core principle in this repo: **better predictive loss does not automatically translate into better trading performance**.
