@@ -2,7 +2,7 @@
 
 > **Version**: 1.0-proof-fold  
 > **Date**: 2026-01-26  
-> **Author**:FV for IBM AI Engineer Portfolio Project 
+> **Author**: FV for IBM AI Engineer Portfolio Project 
 
 ---
 
