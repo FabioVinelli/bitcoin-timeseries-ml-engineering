@@ -169,7 +169,7 @@ This repo treats **Buy & Hold** and **QFL-DCA** as benchmarks for validating whe
 ## Privacy / Alpha Redaction Policy
 
 Excluded from this public repo:
-- Excluded: proprietary/private datasets (example private path: `data/raw/`), unless you supply your own BYOD CSV locally (gitignored).
+- Proprietary/private datasets (example private path: `data/raw/`), unless you supply your own BYOD CSV locally (gitignored).
 - Private outputs (full experiment tables, matched trade histories)
 - Proprietary strategy parameters / thresholds
 - Full QFL-DCA optimization documents
