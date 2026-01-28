@@ -4,7 +4,8 @@
 
 Bitcoin time-series ML engineering project (IBM AI Engineering Certificate): **LSTM variants + walk-forward validation + reporting dashboards**, with **private alpha redaction** and **synthetic CI reproducibility**.
 
-**IBM AI Engineering Certificate Alignment:** Demonstrates time-series data handling, leakage prevention, deep learning architectures (LSTM/BiLSTM/Attention), and comprehensive evaluation—core competencies for production ML systems.
+**IBM AI Engineering Certificate alignment:** This repo demonstrates skills aligned with the IBM AI Engineering curriculum (time-series handling, leakage prevention, deep learning sequence models, evaluation/reporting).  
+It is not an official IBM deliverable and is not endorsed by IBM.
 
 ---
 
@@ -68,6 +69,11 @@ A **leak-free regime classification pipeline** that combines:
 
 **Constraint**: `train.max_date < val.min_date < test.min_date`
 
+**Note on dates:** The test window end date reflects the most recent date available in the dataset snapshot used for this run (not "future" data).
+
+**Why there is a gap (2022–2023):** This proof fold intentionally tests **cross-cycle transfer** by training on Cycle 2, validating on early Cycle 3, and testing on Cycle 4.  
+Intermediate periods (late Cycle 3 bear / recovery) are intentionally excluded here to avoid mixing regime phases in this specific experiment.
+
 ### Regime Label Distribution
 
 ![Regime Label Distribution](docs/images/regime_label_distribution.png)
@@ -77,7 +83,10 @@ A **leak-free regime classification pipeline** that combines:
 | Metric | Train | Val | Test |
 |--------|-------|-----|------|
 | Macro-F1 | 0.994 | 0.405 | 0.272 |
-| Always-HOLD Baseline | 9.0% | 7.8% | 38.8% |
+| Always-HOLD Baseline (macro-F1) | 9.0% | 7.8% | 38.8% |
+
+**Baseline definition:** "Always-HOLD Baseline" refers to the **macro-F1** score of a classifier that predicts only the HOLD class.  
+Because macro-F1 penalizes minority classes and label distributions shift across cycles, this baseline can appear high/low depending on class balance.
 
 ![Cross-Cycle Degradation](docs/images/cross_cycle_degradation.png)
 
@@ -97,12 +106,15 @@ Patterns learned in Cycle 2 (2016-2020) do not transfer to Cycle 4 (2024-2025). 
 ```bash
 python src/proof_fold.py
 ```
+Proof fold writes to `reports/`; main CLI runs write to `outputs/`.
 
 **See detailed documentation:** [MODEL_CARD.md](MODEL_CARD.md)
 
 This project includes a reporting layer intended to make results **auditable and comparable**.
 
 ### Strategy Performance Dashboard (example)
+
+These charts are illustrative templates; they may be generated from synthetic or aggregated data in this public repo.
 
 ![Strategy Performance Analysis](docs/images/strategy_performance.png)
 
@@ -157,7 +169,7 @@ This repo treats **Buy & Hold** and **QFL-DCA** as benchmarks for validating whe
 ## Privacy / Alpha Redaction Policy
 
 Excluded from this public repo:
-- Private datasets (`data/raw/`, trade logs, labeled outcomes)
+- Excluded: proprietary/private datasets (example private path: `data/raw/`), unless you supply your own BYOD CSV locally (gitignored).
 - Private outputs (full experiment tables, matched trade histories)
 - Proprietary strategy parameters / thresholds
 - Full QFL-DCA optimization documents
