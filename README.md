@@ -4,7 +4,7 @@
 
 Bitcoin time-series ML engineering project (IBM AI Engineering Certificate): **LSTM variants + walk-forward validation + reporting dashboards**, with **private alpha redaction** and **synthetic CI reproducibility**.
 
-**IBM AI Engineering Certificate alignment:** This repo demonstrates skills aligned with the IBM AI Engineering curriculum (time-series handling, leakage prevention, deep learning sequence models, evaluation/reporting).  
+This repo demonstrates skills aligned with the IBM AI Engineering curriculum (time-series handling, leakage prevention, deep learning sequence models, evaluation/reporting).  
 It is not an official IBM deliverable and is not endorsed by IBM.
 
 ---
